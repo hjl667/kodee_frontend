@@ -53,19 +53,19 @@ const Start = () => {
     return (
         <div className="startContainer">
             <GlossaryPanel
-            tableData={tableData}
-            glossaries={glossaries}
-            setGlossaryIds={setGlossaryIds}
-            setInterimTranscription={setInterimTranscription}
-            setFinalTranscription={setFinalTranscription}
+                tableData={tableData}
+                glossaries={glossaries}
+                setGlossaryIds={setGlossaryIds}
+                setInterimTranscription={setInterimTranscription}
+                setFinalTranscription={setFinalTranscription}
             />
             <TranscriptionPanel
                 setTranscritpion={setTranscription}
-            glossaryIds={glossaryIds}
-            setTableData={setTableData}
-            interimTranscription={interimTranscription}
-            finalTranscription={finalTranscription}
-            handleUpload={handleUpload}
+                glossaryIds={glossaryIds}
+                setTableData={setTableData}
+                interimTranscription={interimTranscription}
+                finalTranscription={finalTranscription}
+                handleUpload={handleUpload}
             />
             <UploadForm
                 showUploadForm={showUploadForm}

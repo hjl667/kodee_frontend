@@ -1,9 +1,12 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 
 const SpeechRecognitionComponent = ({setInterimTranscription, setFinalTranscription}) => {
 
     const [selectedLang, setSelectedLang] = useState('en-US');
+    const [isListening, setIsListening] = useState(false);
+    const isListeningRef = useRef(isListening);
+
     const handleLanguageChange = (event) => {
         setSelectedLang(event.target.value);
     };
@@ -20,6 +23,7 @@ const SpeechRecognitionComponent = ({setInterimTranscription, setFinalTranscript
         recognition.lang = selectedLang;
         recognition.interimResults = true;
         recognition.maxAlternatives = 1;
+        //recognition.continuous = true;
     }, [recognition, selectedLang]);
 
 
@@ -41,12 +45,43 @@ const SpeechRecognitionComponent = ({setInterimTranscription, setFinalTranscript
         };
 
         recognition.onend = () => {
-            recognition.start(); // Restart recognition when it ends
+
+            console.log(isListeningRef.current);
+            if (isListeningRef.current) {
+                recognition.start();
+            }else{
+                console.log("Speech recognition ended.");
+            }
         };
 
     }, [recognition]);
 
+    const handleListen = () => {
+        setIsListening(!isListening);
+    };
 
+    useEffect(() => {
+        isListeningRef.current = isListening;
+        if (isListening) {
+            recognition.start();
+        } else {
+            console.log(isListening);
+            //recognition.abort();
+            recognition.stop();
+        }
+    }, [isListening]);
+
+    // const handleListen = () => {
+    //     if (isListening) {
+    //         console.log(isListening);
+    //         recognition.abort();
+    //         setIsListening(false);
+    //     } else {
+    //         setIsListening(true);
+    //         console.log(isListening);
+    //         recognition.start();
+    //     }
+    // };
 
     return (
         <div className="select-button-container">
@@ -55,7 +90,9 @@ const SpeechRecognitionComponent = ({setInterimTranscription, setFinalTranscript
                 <option value="en-US">English</option>
                 <option value="zh-CN">Chinese</option>
             </select>
-            <button onClick={() => recognition.start()}>Start</button>
+            <button onClick={handleListen}>
+                {isListening ? 'Stop' : 'Start'}
+            </button>
         </div>
     );
 };
